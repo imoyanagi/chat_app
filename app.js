@@ -53,7 +53,7 @@ function restrict(req, res, next) {
   if (req.session.user) {
     next();
   } else {
-    req.session.error = 'Access denied!';
+    req.session.error = 'アクセスできません！';
     res.redirect('/login');
   }
 }
@@ -63,7 +63,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/restricted', restrict, function(req, res){
-  res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>');
+  res.send('アクセスできました！<a href="/logout">logout</a>');
 });
 
 app.get('/logout', function(req, res){
