@@ -23,7 +23,8 @@ function restrict(req, res, next) {
   if (req.session.user) {
     next();
   } else {
-    req.session.error = 'アクセスできません！';
+    req.session.error = 'ログインしてください';
+    req.session.url = req.originalUrl;
     res.redirect('/login');
   }
 }
@@ -41,7 +42,7 @@ router.get('/',redirectLoggedIn, function(req, res){
 });
 
 router.get('/restricted', restrict, function(req, res){
-  res.send('アクセスできました！<a href="/logout">logout</a>');
+  res.send('ログイン後に行けるページです<a href="/logout">logout</a>');
 });
 
 router.get('/logout', function(req, res){
@@ -57,31 +58,21 @@ router.get('/login', redirectLoggedIn, function(req, res){
 router.post('/login', function(req, res){
   authenticate(req.body.email, req.body.password, function(err, user){
     if (user) {
+      if (req.session.url) var url = req.session.url;
       req.session.regenerate(function(){
         req.session.user = user.id;
-        req.session.success = 'ID:' + user.id
-        res.redirect('success');
+        req.session.success = 'ID:' + user.id;
+        if (url){
+          res.redirect(url)
+        }else {
+          res.redirect('success');
+        }
       });
     } else {
       req.session.error = 'メールアドレスまたはパスワードが間違っています。'
       res.redirect('/login');
     }
   });
-});
-
-router.get('/regist', redirectLoggedIn, function(req, res){
-  res.render('regist');
-});
-
-router.post('/regist', redirectLoggedIn, function(req, res){
-  var email = req.body.email
-  hash({ password: req.body.password }, function (err, pass, salt, hash) {
-      if (err) throw err;
-      User.create({ email: email, password: hash, salt: salt }).then(user => {
-        console.log("ユーザーが作られました");
-      });
-  });
-  res.redirect('login')
 });
 
 router.get('/success', restrict, function(req, res){

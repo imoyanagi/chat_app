@@ -1,5 +1,6 @@
 //Module
-var users = require('./routes/users')
+var login = require('./routes/login')
+var regist = require('./routes/regist')
 var express = require('express');
 var path = require('path');
 var session = require('express-session');
@@ -33,7 +34,8 @@ app.use(function(req, res, next){
   next();
 });
 
-app.use('/', users)
+app.use('/', login)
+app.use('/regist', regist)
 
 /* istanbul ignore next */
 if (!module.parent) {
