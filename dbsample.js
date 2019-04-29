@@ -4,6 +4,10 @@ var User = require('./app/model/user');
 //   console.log("mantaro's auto-generated ID:", mantaro.id);
 // });
 
-User.findOne({where:{email:'maguro@maguro'}}).then(user => {
-    console.log(user.email);
+User.findOne({where:{email:'notpresent'}}).then(user => {
+    if (user) {
+        console.log("correct")
+    } else {
+        console.log("no")
+    }
 });
