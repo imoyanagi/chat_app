@@ -1,5 +1,5 @@
 {
-  "name": "sampleapp",
+  "name": "chat_app",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,6 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-session": "^1.16.1",
+    "pbkdf2-password": "^1.2.1",
+    "pg": "^7.10.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^5.7.6"
   }
 }

@@ -1,0 +1,20 @@
+<% var title = 'Authentication Example' %>
+<% include head %>
+
+<h1>Regist</h1>
+<%- message %>
+<form method="post" action="/regist">
+  <p>
+    <label>Email:</label>
+    <input type="text" name="email">
+  </p>
+  <p>
+    <label>Password:</label>
+    <input type="text" name="password">
+  </p>
+  <p>
+    <input type="submit" value="Regist">
+  </p>
+</form>
+
+<% include foot %>
