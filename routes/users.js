@@ -28,7 +28,15 @@ function restrict(req, res, next) {
   }
 }
 
-router.get('/', function(req, res){
+function redirectLoggedIn(req, res, next) {
+    if (req.session.user) {
+        res.redirect('success')
+    }else{
+        next();
+    }
+}
+
+router.get('/',redirectLoggedIn, function(req, res){
   res.redirect('/login');
 });
 
@@ -42,7 +50,7 @@ router.get('/logout', function(req, res){
   });
 });
 
-router.get('/login', function(req, res){
+router.get('/login', redirectLoggedIn, function(req, res){
   res.render('login');
 });
 
@@ -61,11 +69,11 @@ router.post('/login', function(req, res){
   });
 });
 
-router.get('/regist', function(req, res){
+router.get('/regist', redirectLoggedIn, function(req, res){
   res.render('regist');
 });
 
-router.post('/regist', function(req, res){
+router.post('/regist', redirectLoggedIn, function(req, res){
   var email = req.body.email
   hash({ password: req.body.password }, function (err, pass, salt, hash) {
       if (err) throw err;
@@ -76,7 +84,7 @@ router.post('/regist', function(req, res){
   res.redirect('login')
 });
 
-router.get('/success', function(req, res){
+router.get('/success', restrict, function(req, res){
   res.render('success');
 });
 
