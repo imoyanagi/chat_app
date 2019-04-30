@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(session({
   store: new FileStore({logFn: function(){}}),
   resave: false, // don't save session if unmodified
-  saveUninitialized: true, // don't create session until something stored
+  saveUninitialized: false, // don't create session until something stored
   secret: 'shhhh, very secret'
 }));
 

@@ -4,6 +4,7 @@
 <h1>会員登録</h1>
 <%- message %>
 <form method="post" action="/regist">
+  <input type='hidden' name='_csrf' value=<%- token %>>
   <p>
     <label>Email:</label>
     <input type="text" name="email">
