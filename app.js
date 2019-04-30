@@ -4,6 +4,7 @@ var regist = require('./routes/regist')
 var express = require('express');
 var path = require('path');
 var session = require('express-session');
+var FileStore = require("session-file-store")(session);
 
 var app = express();
 
@@ -16,8 +17,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: false }))
 app.use(session({
+  store: new FileStore({logFn: function(){}}),
   resave: false, // don't save session if unmodified
-  saveUninitialized: false, // don't create session until something stored
+  saveUninitialized: true, // don't create session until something stored
   secret: 'shhhh, very secret'
 }));
 
