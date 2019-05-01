@@ -27,4 +27,9 @@ const User = dbConfig.define('users', {
   // デフォルトでは sequelize はテーブル名を複数形に変更する
 });
 
+//テーブル作成
+User.sync().then(() => {
+    console.log('users table created')
+});
+
 module.exports = User;
