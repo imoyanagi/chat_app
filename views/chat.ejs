@@ -1,23 +1,20 @@
 <% var title = 'ログイン中' %>
 <% include head %>
 
-<h1>ホーム</h1>
 <%- message %>
-<a href="/restricted">追加機能1-4:ログイン後に行けるページ/restricted</a>
-<p><a href="/logout">ログアウト</a></p>
 
 <h2>チャットを作成</h2>
 <form action="/chat" method="post">
   <p>
-    <label>ルーム番号:</label>
+    <label>ルーム名:</label>
     <input type="text" name="roomId" id="room">
   </p>
   <p>
-    <input type="submit" value="Create">
+    <input type="submit" value="Create" class="btn btn-primary">
   </p>
 </form>
 
-<h2>チャット一覧</h2>
-<ul id="threads"></ul>
+<!-- <h2>チャット一覧</h2>
+<ul id="threads"></ul> -->
 
 <% include foot %>

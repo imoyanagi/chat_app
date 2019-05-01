@@ -33,7 +33,7 @@ function restrict(req, res, next) {
 // ログイン済みであればログイン後の画面に飛ばす
 function redirectLoggedIn(req, res, next) {
     if (req.session.user) {
-        res.redirect('chat')
+        res.redirect('/chat')
     }else{
         next();
     }

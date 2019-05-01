@@ -12,7 +12,7 @@ var tokens = new csrf();
 
 function redirectLoggedIn(req, res, next) {
     if (req.session.user) {
-        res.redirect('success')
+        res.redirect('/chat')
     }else{
         next();
     }

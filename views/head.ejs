@@ -2,11 +2,8 @@
 <html>
   <head>
     <title><%= title %></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-      body {
-        padding: 50px;
-        font: 13px Helvetica, Arial, sans-serif;
-      }
       .error {
           color: red
       }
@@ -16,11 +13,20 @@
     </style>
   </head>
   <body>
-    <div>
-      <ul>
-        <li><a href="/regist">登録ページ</a></li>
-        <li><a href="/login">login</a></li>
-        <li><a href="/logout">logout</a></li>
-        <li><a href="/success">ログイン後ページ</a></li>
+      <nav class="navbar navbar-dark bg-dark">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link active text-light" href="/regist">登録ページ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active text-light" href="login">ログインページ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active text-light" href="/logout">ログアウト</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active text-light" href="/chat">ホーム</a>
+        </li>
       </ul>
-    </div>
+      </nav>
+      <div class="container text-center">

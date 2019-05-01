@@ -6,6 +6,7 @@ var express = require('express');
 var path = require('path');
 var session = require('express-session');
 var FileStore = require("session-file-store")(session);
+var User = require('./app/model/user');
 
 
 var app = express();
@@ -56,6 +57,10 @@ io.on('connection', function(socket){
   socket.on('chat message', (msg, roomId, userName) => {
     var myMsg = userName + ": " + msg;
     io.to(roomId).emit('chat message', myMsg);
+  });
+  socket.on('show users', function(){
+    User.findAll().then (users => {
+    });
   });
 });
 
