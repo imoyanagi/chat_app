@@ -53,8 +53,9 @@ io.on('connection', function(socket){
     });
   });
   // export msg to room.ejs
-  socket.on('chat message', (msg, roomId) => {
-    io.to(roomId).emit('chat message', msg);
+  socket.on('chat message', (msg, roomId, userName) => {
+    var myMsg = userName + ": " + msg;
+    io.to(roomId).emit('chat message', myMsg);
   });
 });
 
