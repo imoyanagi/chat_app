@@ -38,10 +38,11 @@ router.post('/', redirectLoggedIn, function(req, res){
    //使用済みの秘密文字を削除する
   delete req.session._csrf;
 
+  var name = req.body.name
   var email = req.body.email
   hash({ password: req.body.password }, function (err, pass, salt, hash) {
       if (err) throw err;
-      User.create({ email: email, password: hash, salt: salt }).then(user => {
+      User.create({ name: name, email: email, password: hash, salt: salt }).then(user => {
         console.log("ユーザーが作られました");
       });
   });

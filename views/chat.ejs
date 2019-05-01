@@ -14,7 +14,8 @@
     </style>
   </head>
   <body>
-    <h2>チャットしましょう！<a href="/logout">ログアウト</a></h2>
+    <a href="/logout">ログアウト</a></h2>
+    <h2>ルーム番号:<%- roomId %></h2>
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
@@ -23,7 +24,7 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       $(function () {
-        var socket = io();
+        const socket = io("/<%- roomId %>");
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
           socket.emit('chat message', $('#m').val());

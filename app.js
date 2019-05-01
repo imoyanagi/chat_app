@@ -40,7 +40,6 @@ app.use(function(req, res, next){
   next();
 });
 
-// chat
 function restrict(req, res, next) {
   if (req.session.user) {
     next();
@@ -51,15 +50,49 @@ function restrict(req, res, next) {
   }
 }
 
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+// chat
+
+
+
+// make a chat room
+
+app.post('/chat', restrict, function(req, res){
+  var roomId = req.body.roomId
+  const nsp = io.of(`/${roomId}`);
+  nsp.on('connection', function(socket){
+    console.log('someone connected');
+    socket.on('chat message', (msg) => {
+      console.log(msg)
+      nsp.emit('chat message', msg);
+    });
   });
+  // io.on('connection', function(socket){
+  //   socket.join(roomId, () => {
+  //     let rooms = Object.keys(socket.rooms);
+  //     console.log(rooms); // [ <socket.id>, 'room 237' ]
+  //     io.to(roomId).emit('a new user has joined the room'); // broadcast to everyone in the room
+  //   });
+  //   socket.on('chat message', (msg) => {
+  //     io.to(roomId).emit('chat message', msg);
+  //   });
+  // });
+  res.render('chat', {roomId: roomId})
 });
+
+// io.on('connection', function(socket){
+//   socket.join('room 237', () => {
+//     let rooms = Object.keys(socket.rooms);
+//     console.log(rooms); // [ <socket.id>, 'room 237' ]
+//     io.to('room 237').emit('a new user has joined the room'); // broadcast to everyone in the room
+//   });
+//   socket.on('chat message', (roomId, msg) => {
+//     io.emit('chat message', msg);
+//   });
+// });
 
 
 app.get('/chat', restrict, function(req, res){
-  res.render('chat');
+  res.render('home');
 });
 
 
