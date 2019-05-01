@@ -48,16 +48,23 @@ io.on('connection', function(socket){
   // make a chat room
 
   socket.on('create a room', function(roomId) {
+    models.room.create({ name: roomId }).then(room => {
+        console.log("roomが作られました");
+    });
     socket.join(roomId, () => {
       // let rooms = Object.keys(socket.rooms);
       // console.log(rooms);
     });
   });
 
+  // join a chat room
+  socket.on('join a room', function(roomId) {
+    socket.join(roomId);
+  });
+
   // export msg to room.ejs
-  socket.on('chat message', (msg, roomId, userName) => {
-    var myMsg = userName + ": " + msg;
-    io.to(roomId).emit('chat message', myMsg);
+  socket.on('chat message', (msg, roomId) => {
+    io.to(roomId).emit('chat message', msg);
   });
   socket.on('show users', function(){
     User.findAll().then (users => {

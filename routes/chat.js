@@ -12,21 +12,20 @@ function restrict(req, res, next) {
   }
 }
 
-router.post('/', restrict, function(req, res) {
-   var users = models.user.findAll().then(users => {
+router.get('/', restrict, function(req, res){
+  var users = models.user.findAll().then(users => {
     var getUsers = [];
     for(var i=0; i < users.length; i++) {
       getUsers.push(users[i].dataValues.name);
     }
-     res.render('room', {roomId: req.body.roomId, users: getUsers });
-   });
-   // var user = User.findOne({ where:{id:req.session.user} }).then(user => {
-   //   res.render('room', {roomId: req.body.roomId, userName: user.name });
-   // });
-});
-
-router.get('/', restrict, function(req, res){
-  res.render('chat');
+    var rooms = models.room.findAll().then(rooms => {
+      var getRooms = [];
+      for(var i=0; i < rooms.length; i++) {
+        getRooms.push(rooms[i].dataValues.name);
+      }
+      res.render('chat', { users: getUsers, rooms: getRooms });
+    });
+  });
 });
 
 

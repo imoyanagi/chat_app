@@ -1,20 +1,71 @@
 <% var title = 'ログイン中' %>
 <% include head %>
 
-<%- message %>
+<div id="chatTemplate">
+    <h2>チャットを作成</h2>
+    <form id="createRoom">
+      <p>
+        <label>ルーム名:</label>
+        <input id="inputRoomId">
+      </p>
+      <p>
+        <input type="submit" value="Create" class="btn btn-primary">
+      </p>
+    </form>
+    <h2>チャット一覧</h2>
+    <% for(i = 0; i < rooms.length; i++){ %>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><span class="roomId"><%= rooms[i] %></span><button class="joinRoom btn btn-warning ml-4">参加</button></li>
+        </ul>
+    <% } %>
+</div>
 
-<h2>チャットを作成</h2>
-<form action="/chat" method="post">
-  <p>
-    <label>ルーム名:</label>
-    <input type="text" name="roomId" id="room">
-  </p>
-  <p>
-    <input type="submit" value="Create" class="btn btn-primary">
-  </p>
-</form>
+<% include room %>
 
-<!-- <h2>チャット一覧</h2>
-<ul id="threads"></ul> -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $(function () {
+        var socket = io();
+
+        $('#roomTemplate').css('display', 'none');
+
+        $('#createRoom').submit(function(e){
+            e.preventDefault();
+            var roomId = $('#inputRoomId').val();
+            socket.emit('create a room', roomId);
+            $('#chatTemplate').css('display', 'none');
+            $('#roomTemplate').css('display', 'block');
+            $('#roomId').text(roomId);
+        });
+
+        $('.joinRoom').on('click', function(e){
+            e.preventDefault();
+            var roomId = $(this).prev().text();
+            socket.emit('join a room', roomId);
+            $('#chatTemplate').css('display', 'none');
+            $('#roomTemplate').css('display', 'block');
+            $('#roomId').text(roomId);
+        });
+
+        //メッセージ取得
+        $('#submitMsg').submit(function(e){
+          e.preventDefault(); // prevents page reloading
+          socket.emit('chat message', $('#m').val(), $('#roomId').text());
+          $('#m').val('');
+          return false;
+        });
+
+        //メッセージ出力
+        socket.on('chat message', function(msg){
+          $('#messages').append($('<li class="list-group-item" >').text(msg));
+        });
+
+        //招待
+        // $('.inviteUser').on('click', function(){
+        //     socket.emit('invite a user', $('#invite').val());
+        // });
+    });
+</script>
 
 <% include foot %>
