@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../app/model/user');
+var models = require('../models');
 
 function restrict(req, res, next) {
   if (req.session.user) {
@@ -13,7 +13,7 @@ function restrict(req, res, next) {
 }
 
 router.post('/', restrict, function(req, res) {
-   var users = User.findAll().then(users => {
+   var users = models.user.findAll().then(users => {
     var getUsers = [];
     for(var i=0; i < users.length; i++) {
       getUsers.push(users[i].dataValues.name);

@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "vagrant",
+    "password": 1111,
+    "database": "chat",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "vagrant",
+    "password": 1111,
+    "database": "chat",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "vagrant",
+    "password": 1111,
+    "database": "chat",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

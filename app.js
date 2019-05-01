@@ -6,8 +6,7 @@ var express = require('express');
 var path = require('path');
 var session = require('express-session');
 var FileStore = require("session-file-store")(session);
-var User = require('./app/model/user');
-
+var models = require('./models');
 
 var app = express();
 var http = require('http').Server(app);
@@ -47,12 +46,14 @@ app.use(function(req, res, next){
 
 io.on('connection', function(socket){
   // make a chat room
+
   socket.on('create a room', function(roomId) {
     socket.join(roomId, () => {
-      let rooms = Object.keys(socket.rooms);
-      console.log(rooms); // [ <socket.id>, 'room 237' ]
+      // let rooms = Object.keys(socket.rooms);
+      // console.log(rooms);
     });
   });
+
   // export msg to room.ejs
   socket.on('chat message', (msg, roomId, userName) => {
     var myMsg = userName + ": " + msg;

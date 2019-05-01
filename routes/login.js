@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var hash = require('pbkdf2-password')()
-var User = require('../app/model/user');
+var hash = require('pbkdf2-password')();
+var models = require('../models');
 
 var app = express();
 
@@ -9,7 +9,7 @@ var app = express();
 // ログイン認証
 function authenticate(email, pass, fn) {
   if (!module.parent) console.log('authenticating %s:%s', email, pass);
-  var user = User.findOne({ where:{email:email} }).then(user => {
+  var user = models.user.findOne({ where:{email:email} }).then(user => {
       if (!user) return fn(new Error('cannot find user'));
       hash({ password: pass, salt: user.salt }, function(err, pass, salt, hash) {
         if (err) return fn(err);

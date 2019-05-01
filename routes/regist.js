@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var hash = require('pbkdf2-password')()
-var User = require('../app/model/user');
+var hash = require('pbkdf2-password')();
+var models = require('../models');
 
 var app = express();
 
@@ -42,7 +42,7 @@ router.post('/', redirectLoggedIn, function(req, res){
   var email = req.body.email
   hash({ password: req.body.password }, function (err, pass, salt, hash) {
       if (err) throw err;
-      User.create({ name: name, email: email, password: hash, salt: salt }).then(user => {
+      models.user.create({ name: name, email: email, password: hash, salt: salt }).then(user => {
         console.log("ユーザーが作られました");
       });
   });
