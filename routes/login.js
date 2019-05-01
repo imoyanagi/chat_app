@@ -31,7 +31,7 @@ function restrict(req, res, next) {
 
 function redirectLoggedIn(req, res, next) {
     if (req.session.user) {
-        res.redirect('success')
+        res.redirect('chat')
     }else{
         next();
     }
@@ -65,7 +65,7 @@ router.post('/login', function(req, res){
         if (url){
           res.redirect(url)
         }else {
-          res.redirect('success');
+          res.redirect('chat');
         }
       });
     } else {
@@ -73,10 +73,6 @@ router.post('/login', function(req, res){
       res.redirect('/login');
     }
   });
-});
-
-router.get('/success', restrict, function(req, res){
-  res.render('success');
 });
 
 module.exports = router;

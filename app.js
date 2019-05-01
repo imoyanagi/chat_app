@@ -1,12 +1,16 @@
 //Module
 var login = require('./routes/login')
 var regist = require('./routes/regist')
+var chat = require('./routes/chat')
 var express = require('express');
 var path = require('path');
 var session = require('express-session');
 var FileStore = require("session-file-store")(session);
 
+
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 // config
 
@@ -36,11 +40,33 @@ app.use(function(req, res, next){
   next();
 });
 
+// chat
+function restrict(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    req.session.error = 'ログインしてください';
+    req.session.url = req.originalUrl;
+    res.redirect('/login');
+  }
+}
+
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+});
+
+
+app.get('/chat', restrict, function(req, res){
+  res.render('chat');
+});
+
+
 app.use('/', login)
 app.use('/regist', regist)
 
 /* istanbul ignore next */
-if (!module.parent) {
-  app.listen(8000);
-  console.log('Express started on port 8000');
-}
+http.listen(8000, function(){
+  console.log('listening on *:3000');
+});
