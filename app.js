@@ -20,12 +20,20 @@ app.set('views', path.join(__dirname, 'views'));
 // middleware
 
 app.use(express.urlencoded({ extended: false }))
-app.use(session({
+var sessionMiddleware = session({
   store: new FileStore({logFn: function(){}}),
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
   secret: 'shhhh, very secret'
-}));
+});
+
+// httpリクエスト用セッション
+app.use(sessionMiddleware);
+// socket.io用セッション
+io.use(function(socket, next){
+  sessionMiddleware(socket.request, socket.request.res, next);
+});
+
 
 // フラッシュメッセージ
 
@@ -40,13 +48,10 @@ app.use(function(req, res, next){
   next();
 });
 
-
-
 // chat
 
 io.on('connection', function(socket){
   // make a chat room
-
   socket.on('create a room', function(roomId) {
     models.room.create({ name: roomId }).then(room => {
         console.log("roomが作られました");
@@ -62,8 +67,9 @@ io.on('connection', function(socket){
     socket.join(roomId);
   });
 
-  // export msg to room.ejs
+  // create msg
   socket.on('chat message', (msg, roomId) => {
+    models.chat.create({ userId: socket.session.user, msg: msg });
     io.to(roomId).emit('chat message', msg);
   });
   socket.on('show users', function(){
