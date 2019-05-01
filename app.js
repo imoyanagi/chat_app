@@ -63,14 +63,26 @@ io.on('connection', function(socket){
   });
 
   // join a chat room
+  // roomIdは名前がややこしいのでroomNameに変えたい
   socket.on('join a room', function(roomId) {
-    socket.join(roomId);
+    models.room.findOne({ where:{name: roomId} }).then(room => {
+      models.chat.findAll({ where:{roomId: room.id} }).then(chats => {
+        var logs = [];
+        for(var i = 0; i < chats.length; i++) {
+          logs.push(chats[i].dataValues.msg);
+        }
+        io.to(socket.id).emit('chat logs', logs);
+        socket.join(roomId);
+      });
+    });
   });
 
   // create msg
   socket.on('chat message', (msg, roomId) => {
-    models.chat.create({ userId: socket.session.user, msg: msg });
-    io.to(roomId).emit('chat message', msg);
+    models.room.findOne({ where:{name: roomId} }).then(room => {
+      models.chat.create({ userId: socket.request.session.user, roomId: room.id, msg: msg });
+      io.to(roomId).emit('chat message', msg);
+    });
   });
   socket.on('show users', function(){
     User.findAll().then (users => {

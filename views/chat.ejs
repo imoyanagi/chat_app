@@ -48,7 +48,14 @@
             $('#roomId').text(roomId);
         });
 
-        //メッセージ取得
+        // log取得
+        socket.on('chat logs', function(logs){
+            for(i = 0; i < logs.length; i++){
+                $('#messages').append($('<li class="list-group-item" >').text(logs[i]));
+            }
+        });
+
+        // メッセージ取得
         $('#submitMsg').submit(function(e){
           e.preventDefault(); // prevents page reloading
           socket.emit('chat message', $('#m').val(), $('#roomId').text());

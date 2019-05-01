@@ -37,30 +37,3 @@
 
     <ul id="messages" class="list-group list-group-flush" ></ul>
 </div>
-<!-- <script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script>
-  $(function () {
-        var socket = io();
-
-        socket.emit('create a room', $('#roomId').text());
-
-        //メッセージ取得
-        $('form').submit(function(e){
-          e.preventDefault(); // prevents page reloading
-          socket.emit('chat message', $('#m').val(), $('#roomId').text(), $('#userName').text() );
-          $('#m').val('');
-          return false;
-        });
-
-        //メッセージ出力
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li class="list-group-item" >').text(msg));
-        });
-
-        //招待
-        // $('.inviteUser').on('click', function(){
-        //     socket.emit('invite a user', $('#invite').val());
-        // });
-    });
-</script> -->
