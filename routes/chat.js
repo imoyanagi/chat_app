@@ -13,9 +13,16 @@ function restrict(req, res, next) {
 }
 
 router.post('/', restrict, function(req, res) {
-   var user = User.findOne({ where:{id:req.session.user} }).then(user => {
-     res.render('room', {roomId: req.body.roomId, userName: user.name });
+   var users = User.findAll().then(users => {
+    var getUsers = [];
+    for(var i=0; i < users.length; i++) {
+      getUsers.push(users[i].dataValues.name);
+    }
+     res.render('room', {roomId: req.body.roomId, users: getUsers });
    });
+   // var user = User.findOne({ where:{id:req.session.user} }).then(user => {
+   //   res.render('room', {roomId: req.body.roomId, userName: user.name });
+   // });
 });
 
 router.get('/', restrict, function(req, res){
