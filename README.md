@@ -8,5 +8,5 @@
 
 1.npm install  
 2.Create database on your PostgreSql and modify db/db-config.js like  
-  const dbConfig = new Sequelize('databaseName', 'userName', 'passWord', {...  
+  const dbConfig = new Sequelize('database', 'user', 'password', {...  
 3.node app.js  
