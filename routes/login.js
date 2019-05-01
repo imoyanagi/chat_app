@@ -19,6 +19,7 @@ function authenticate(email, pass, fn) {
   });
 }
 
+// ログイン済みでなければログイン画面に飛ばす
 function restrict(req, res, next) {
   if (req.session.user) {
     next();
@@ -29,6 +30,7 @@ function restrict(req, res, next) {
   }
 }
 
+// ログイン済みであればログイン後の画面に飛ばす
 function redirectLoggedIn(req, res, next) {
     if (req.session.user) {
         res.redirect('chat')

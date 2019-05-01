@@ -40,66 +40,30 @@ app.use(function(req, res, next){
   next();
 });
 
-function restrict(req, res, next) {
-  if (req.session.user) {
-    next();
-  } else {
-    req.session.error = 'ログインしてください';
-    req.session.url = req.originalUrl;
-    res.redirect('/login');
-  }
-}
+
 
 // chat
 
-
-
-// make a chat room
-
-app.post('/chat', restrict, function(req, res){
-  var roomId = req.body.roomId
-  const nsp = io.of(`/${roomId}`);
-  nsp.on('connection', function(socket){
-    console.log('someone connected');
-    socket.on('chat message', (msg) => {
-      console.log(msg)
-      nsp.emit('chat message', msg);
+io.on('connection', function(socket){
+  // make a chat room
+  socket.on('create a room', function(roomId) {
+    socket.join(roomId, () => {
+      let rooms = Object.keys(socket.rooms);
+      console.log(rooms); // [ <socket.id>, 'room 237' ]
     });
   });
-  // io.on('connection', function(socket){
-  //   socket.join(roomId, () => {
-  //     let rooms = Object.keys(socket.rooms);
-  //     console.log(rooms); // [ <socket.id>, 'room 237' ]
-  //     io.to(roomId).emit('a new user has joined the room'); // broadcast to everyone in the room
-  //   });
-  //   socket.on('chat message', (msg) => {
-  //     io.to(roomId).emit('chat message', msg);
-  //   });
-  // });
-  res.render('chat', {roomId: roomId})
-});
-
-// io.on('connection', function(socket){
-//   socket.join('room 237', () => {
-//     let rooms = Object.keys(socket.rooms);
-//     console.log(rooms); // [ <socket.id>, 'room 237' ]
-//     io.to('room 237').emit('a new user has joined the room'); // broadcast to everyone in the room
-//   });
-//   socket.on('chat message', (roomId, msg) => {
-//     io.emit('chat message', msg);
-//   });
-// });
-
-
-app.get('/chat', restrict, function(req, res){
-  res.render('home');
+  // export msg to room.ejs
+  socket.on('chat message', (msg, roomId) => {
+    io.to(roomId).emit('chat message', msg);
+  });
 });
 
 
 app.use('/', login)
 app.use('/regist', regist)
+app.use('/chat', chat)
 
 /* istanbul ignore next */
 http.listen(8000, function(){
-  console.log('listening on *:3000');
+  console.log('listening on *:8000');
 });
