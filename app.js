@@ -55,23 +55,27 @@ io.on('connection', function(socket){
   socket.on('create a room', function(roomId) {
     models.room.create({ name: roomId }).then(room => {
         console.log("roomが作られました");
+        models.user.findOne({ where:{id: socket.request.session.user} }).then(user => {
+          models.roomUser.create({ userId: user.id, roomId: room.id })
+      });
     });
-    socket.join(roomId, () => {
-      // let rooms = Object.keys(socket.rooms);
-      // console.log(rooms);
-    });
+    // models.room.findOne({ where:{name: roomId} }).then(room => {
+    //   console.log("roomid:", room.id);
+    //   models.user.findOne({ where:{id: socket.request.session.user} }).then(user => {
+    //     console.log("userid:". user.id);
+    //     models.roomUser.create({ userId: user.id, room: room.id })
+    //   });
+    // });
+    socket.join(roomId);
   });
 
   // join a chat room
   // roomIdは名前がややこしいのでroomNameに変えたい
+
   socket.on('join a room', function(roomId) {
     models.room.findOne({ where:{name: roomId} }).then(room => {
       models.chat.findAll({ where:{roomId: room.id} }).then(chats => {
-        var logs = [];
-        for(var i = 0; i < chats.length; i++) {
-          logs.push(chats[i].dataValues.msg);
-        }
-        io.to(socket.id).emit('chat logs', logs);
+        io.to(socket.id).emit('chat logs', chats);
         socket.join(roomId);
       });
     });
@@ -84,8 +88,11 @@ io.on('connection', function(socket){
       io.to(roomId).emit('chat message', msg);
     });
   });
-  socket.on('show users', function(){
-    User.findAll().then (users => {
+  socket.on('invite a user', function(userName, roomId){
+    models.room.findOne({ where:{name: roomId} }).then(room => {
+      models.user.findOne({ where:{name: userName} }).then (user => {
+        models.roomuser.create({ userId: user.id, room: room.id })
+      });
     });
   });
 });

@@ -14,19 +14,19 @@ function restrict(req, res, next) {
 
 router.get('/', restrict, function(req, res){
   var users = models.user.findAll().then(users => {
-    var getUsers = [];
-    for(var i=0; i < users.length; i++) {
-      getUsers.push(users[i].dataValues.name);
-    }
-    var rooms = models.room.findAll().then(rooms => {
-      var getRooms = [];
-      for(var i=0; i < rooms.length; i++) {
-        getRooms.push(rooms[i].dataValues.name);
-      }
-      res.render('chat', { users: getUsers, rooms: getRooms });
+    models.roomUser.findAll({ where:{userId: req.session.user} }).then(rooms => {
+        var getRooms = [];
+        rooms.forEach(function(room){
+          room.getRoom().then(room => {
+            getRooms.push(room.name);
+          })
+        });
+        return getRooms;
+    }).then(getRooms => {
+      console.log(getRooms);
+      res.render('chat', {users: users, rooms: getRooms});
     });
   });
 });
-
 
 module.exports = router;
