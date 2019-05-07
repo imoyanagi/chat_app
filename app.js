@@ -97,9 +97,20 @@ io.on('connection', function(socket){
   });
 });
 
+function restrict(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    req.session.error = 'ログインしてください';
+    req.session.url = req.originalUrl;
+    res.redirect('/login');
+  }
+}
+
 
 app.use('/', login)
 app.use('/regist', regist)
+app.use(restrict)
 app.use('/chat', chat)
 
 /* istanbul ignore next */

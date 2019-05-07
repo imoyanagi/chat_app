@@ -2,17 +2,17 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-function restrict(req, res, next) {
-  if (req.session.user) {
-    next();
-  } else {
-    req.session.error = 'ログインしてください';
-    req.session.url = req.originalUrl;
-    res.redirect('/login');
-  }
-}
+// function restrict(req, res, next) {
+//   if (req.session.user) {
+//     next();
+//   } else {
+//     req.session.error = 'ログインしてください';
+//     req.session.url = req.originalUrl;
+//     res.redirect('/login');
+//   }
+// }
 
-router.get('/', restrict, function(req, res){
+router.get('/', function(req, res){
   var users = models.user.findAll().then(users => {
     models.roomUser.findAll({ where:{userId: req.session.user} }).then(rooms => {
       var getRooms = [];
