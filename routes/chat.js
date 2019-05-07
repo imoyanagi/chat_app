@@ -15,13 +15,14 @@ function restrict(req, res, next) {
 router.get('/', restrict, function(req, res){
   var users = models.user.findAll().then(users => {
     models.roomUser.findAll({ where:{userId: req.session.user} }).then(rooms => {
-        var getRooms = [];
-        rooms.forEach(function(room){
-          room.getRoom().then(room => {
-            getRooms.push(room.name);
-          })
-        });
-        return getRooms;
+      var getRooms = [];
+      Promise.all(rooms.map(async room => await getRooms.push(room.getRoom().name)));
+        // rooms.forEach(function(room){
+        //   room.getRoom().then(room => {
+        //     getRooms.push(room.name);
+        //   })
+        // });
+      return getRooms;
     }).then(getRooms => {
       console.log(getRooms);
       res.render('chat', {users: users, rooms: getRooms});
