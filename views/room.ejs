@@ -23,7 +23,7 @@
           <div class="modal-body">
             <% users.forEach(function(user){%>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><%= user.name %><button class="inviteUser btn btn-warning ml-4">招待</button></li>
+                    <li class="list-group-item"><span class="userName"><%= user.name %></span><button class="inviteUser btn btn-warning ml-4">招待</button></li>
                 </ul>
             <% }); %>
           </div>

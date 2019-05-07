@@ -73,6 +73,7 @@ io.on('connection', function(socket){
   // roomIdは名前がややこしいのでroomNameに変えたい
 
   socket.on('join a room', function(roomId) {
+    console.log(roomId);
     models.room.findOne({ where:{name: roomId} }).then(room => {
       models.chat.findAll({ where:{roomId: room.id} }).then(chats => {
         io.to(socket.id).emit('chat logs', chats);
@@ -91,12 +92,13 @@ io.on('connection', function(socket){
   socket.on('invite a user', function(userName, roomId){
     models.room.findOne({ where:{name: roomId} }).then(room => {
       models.user.findOne({ where:{name: userName} }).then (user => {
-        models.roomuser.create({ userId: user.id, room: room.id })
+        models.roomUser.create({ userId: user.id,roomId: room.id });
       });
     });
   });
 });
 
+// アクセス制限
 function restrict(req, res, next) {
   if (req.session.user) {
     next();
