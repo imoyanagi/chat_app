@@ -16,16 +16,16 @@ router.get('/', restrict, function(req, res){
   var users = models.user.findAll().then(users => {
     models.roomUser.findAll({ where:{userId: req.session.user} }).then(rooms => {
       var getRooms = [];
-      Promise.all(rooms.map(async room => await getRooms.push(room.getRoom().name)));
-        // rooms.forEach(function(room){
-        //   room.getRoom().then(room => {
-        //     getRooms.push(room.name);
-        //   })
-        // });
-      return getRooms;
-    }).then(getRooms => {
-      console.log(getRooms);
-      res.render('chat', {users: users, rooms: getRooms});
+      var promises = [];
+      rooms.forEach(function(room){
+        promises.push(room.getRoom().then(room => {
+          getRooms.push(room.name);
+        }));
+      });
+      Promise.all(promises).then(results => {
+        console.log(getRooms);
+        res.render('chat', {users: users, rooms: getRooms});
+      });
     });
   });
 });
